@@ -10,20 +10,18 @@ const projects = (await getCollection('projects')).sort((a, b) => {
 const domains = [...new Set(projects.flatMap((p) => p.data.domains))];
 const methods = [...new Set(projects.flatMap((p) => p.data.methods))];
 const types = [...new Set(projects.map((p) => p.data.projectType))];
-const levels = [...new Set(projects.map((p) => p.data.publicLevel))];
 ---
 
-<BaseLayout title="项目归档｜李宗泽" description="七个地热、热工、管网仿真、数据与工业软件项目，明确个人参与、团队边界、验证和结果限制。">
-  <header class="page-hero"><div class="container"><nav class="breadcrumbs" aria-label="面包屑"><a href="/">首页</a> / 项目</nav><p class="eyebrow">PROJECT ARCHIVE · 7</p><h1>项目归档</h1><p class="lede">按工程领域、方法、类型与公开程度组合筛选。筛选只是阅读工具，七个项目均保留在无脚本页面中。</p></div></header>
+<BaseLayout title="项目｜李宗泽" description="我的七个地热、热工、管网仿真、数据与工业软件项目。">
+  <header class="page-hero"><div class="container"><nav class="breadcrumbs" aria-label="面包屑"><a href="/">首页</a> / 项目</nav><p class="eyebrow">PROJECTS · 7</p><h1>项目</h1><p class="lede">可以按领域、方法或项目类型筛选。每个项目页都写明我做的工作、项目协作方式和结果检查方法。</p></div></header>
   <section class="section">
     <div class="container">
       <div class="filter-panel" aria-labelledby="filter-title" data-project-filters>
-        <h2 id="filter-title" style="font-size:1.2rem">组合筛选</h2>
+        <h2 id="filter-title" style="font-size:1.2rem">筛选项目</h2>
         {[
           ['domain', '领域', domains],
           ['method', '方法', methods],
-          ['type', '类型', types],
-          ['level', '公开', levels]
+          ['type', '类型', types]
         ].map(([group, label, values]) => (
           <div class="filter-group">
             <span class="filter-label">{label}</span>
@@ -50,7 +48,7 @@ const levels = [...new Set(projects.map((p) => p.data.publicLevel))];
       const status = panel.querySelector('[data-filter-status]');
       const empty = document.querySelector('[data-filter-empty]');
       const active = new Map();
-      const cardValue = (card, group) => group === 'domain' ? card.dataset.domains : group === 'method' ? card.dataset.methods : group === 'type' ? card.dataset.type : card.dataset.level;
+      const cardValue = (card, group) => group === 'domain' ? card.dataset.domains : group === 'method' ? card.dataset.methods : card.dataset.type;
       const apply = () => {
         let visible = 0;
         cards.forEach((card) => {
@@ -76,7 +74,7 @@ const levels = [...new Set(projects.map((p) => p.data.publicLevel))];
         active.clear(); buttons.forEach((button) => button.setAttribute('aria-pressed', 'false')); apply();
       });
       const params = new URLSearchParams(location.search);
-      for (const group of ['domain', 'method', 'type', 'level']) {
+      for (const group of ['domain', 'method', 'type']) {
         const requested = params.get(group);
         if (!requested) continue;
         const button = buttons.find((item) => item.dataset.filterGroup === group && (item.dataset.filterValue === requested || item.dataset.filterValue.includes(requested)));

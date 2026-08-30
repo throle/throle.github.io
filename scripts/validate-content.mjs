@@ -69,18 +69,21 @@ for (const [id, order] of expectedFeatured) if (foundFeatured.get(id) !== order)
 for (const id of foundFeatured.keys()) if (!expectedFeatured.has(id)) errors.push(`${id} 不应进入V1首页精选`);
 
 const p05 = await readFile(join(projectDir, '05-gas-leak-dataset.mdx'), 'utf8');
-const p05Required = [
-  '2063组全量仿真工况', '批量运行', '状态跟踪', '数据汇总',
-  '本人执行', '直接组织执行', '不支持进一步拆分两类数量'
-];
-for (const phrase of p05Required) if (!p05.includes(phrase)) errors.push(`项目05缺少最新贡献口径：${phrase}`);
-if (!/核心内核由团队与师兄开发/.test(p05)) errors.push('项目05未明确核心内核归团队与师兄开发');
+const p05Role = '我负责2063组仿真工况的批量运行、状态跟踪和数据汇总，其中既有我直接运行的任务，也有我组织同门完成的任务；当时没有按这两类单独计数。我还参与了识别算法测试和技术交付。';
+if (!p05.includes(p05Role)) errors.push('项目05缺少最新当事人表述');
+if (!/燃气管网仿真底座和核心内核由同门师兄和课题组开发/.test(p05)) errors.push('项目05未明确核心内核由同门师兄和课题组开发');
 const p06 = await readFile(join(projectDir, '06-gas-network-forecast.mdx'), 'utf8');
-if (!/LSTM负荷预测主要代码由本人编写/.test(p06) || !/核心物理仿真内核.*团队与师兄开发/.test(p06)) errors.push('项目06缺少LSTM本人代码或团队内核边界');
-for (const id of ['04', '05', '06', '07']) {
+if (!/LSTM负荷预测的主要代码是我写的/.test(p06) || !/核心物理仿真内核、平台框架和整体业务系统由同门师兄和课题组开发/.test(p06)) errors.push('项目06缺少LSTM本人代码或核心内核协作说明');
+const expectedKernelAttribution = new Map([
+  ['04', /一维水热力核心仿真内核由同门师兄和课题组开发/],
+  ['05', /燃气管网仿真底座和核心内核由同门师兄和课题组开发/],
+  ['06', /核心物理仿真内核、平台框架和整体业务系统由同门师兄和课题组开发/],
+  ['07', /核心水热力与混油仿真内核、优化平台及在线集成由同门师兄和课题组共同开发/]
+]);
+for (const [id, attributionPattern] of expectedKernelAttribution) {
   const name = projectFiles.find((item) => item.startsWith(`${id}-`));
   const text = await readFile(join(projectDir, name), 'utf8');
-  if (!/核心.*内核.*团队|仿真底座.*团队|核心水热力.*团队/.test(text)) errors.push(`项目${id}未明确团队核心内核边界`);
+  if (!attributionPattern.test(text)) errors.push(`项目${id}缺少核心内核协作说明`);
 }
 
 const publicationText = (await Promise.all((await readdir(join(contentRoot, 'publications'))).map((name) => readFile(join(contentRoot, 'publications', name), 'utf8')))).join('\n');

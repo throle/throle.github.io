@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
   <title id="title">李宗泽的工程研究主页</title>
-  <desc id="desc">西安交通大学动力工程及工程热物理博士候选人，研究地下能源、岩石力学与油气管网。</desc>
+  <desc id="desc">西安交通大学动力工程及工程热物理博士研究生，研究地下能源、岩石力学与油气管网。</desc>
   <defs>
     <linearGradient id="ground" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#10202f"/>
@@ -20,7 +20,7 @@
   <path d="M925 220v-72m55 72v-110m55 110v-45m55 45V128" stroke="#afc4ce" stroke-width="8" stroke-linecap="square" opacity=".52"/>
   <rect x="76" y="72" width="74" height="8" rx="4" fill="#d06a32"/>
   <text x="76" y="190" fill="#f8fbfc" font-size="80" font-weight="700" font-family="Noto Sans SC, Source Han Sans SC, Microsoft YaHei, sans-serif">李宗泽</text>
-  <text x="78" y="248" fill="#d5e1e7" font-size="30" font-family="Noto Sans SC, Source Han Sans SC, Microsoft YaHei, sans-serif">动力工程及工程热物理 · 博士候选人</text>
+  <text x="78" y="248" fill="#d5e1e7" font-size="30" font-family="Noto Sans SC, Source Han Sans SC, Microsoft YaHei, sans-serif">动力工程及工程热物理 · 博士研究生</text>
   <line x1="78" y1="306" x2="650" y2="306" stroke="#afc4ce" stroke-opacity=".46"/>
   <g fill="#edf2f4" font-size="28" font-family="Noto Sans SC, Source Han Sans SC, Microsoft YaHei, sans-serif">
     <text x="78" y="374">地下能源与增强型地热系统</text>

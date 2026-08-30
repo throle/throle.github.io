@@ -7,7 +7,7 @@ const projectById = new Map(projects.map((p) => [p.data.id, p.data]));
 ---
 
 <BaseLayout title="研究地图｜李宗泽" description="从深层地热储层改造、裂缝颗粒输运到油气管网仿真与数据分析的研究关系图。">
-  <header class="page-hero"><div class="container"><nav class="breadcrumbs" aria-label="面包屑"><a href="/">首页</a> / 研究</nav><p class="eyebrow">RESEARCH MAP</p><h1>研究地图</h1><p class="lede">研究不是领域标签的并列，而是从对象与边界出发，经由实验、机理、仿真、数据和验证，形成工程解释与交付。</p></div></header>
+  <header class="page-hero"><div class="container"><nav class="breadcrumbs" aria-label="面包屑"><a href="/">首页</a> / 研究</nav><p class="eyebrow">RESEARCH MAP</p><h1>研究地图</h1><p class="lede">这些课题看起来跨越地热、岩石、颗粒和管网，但我处理它们的方法很相似：先理解物理过程，再用实验、仿真或数据回答具体问题。</p></div></header>
   <section class="section">
     <div class="container">
       <div class="map-grid">
@@ -23,14 +23,13 @@ const projectById = new Map(projects.map((p) => [p.data.id, p.data]));
       <div class="publication-list" style="margin-top:32px">
         {topics.map((topic) => (
           <article class="publication-item">
-            <span class="status warning">{topic.data.publicLevel}</span>
             <h3>{topic.data.title}</h3>
             <p class="lede">{topic.data.question}</p>
             <p>{topic.data.scope}</p>
             <div class="tag-row">{topic.data.methods.map((item) => <span class="tag">{item}</span>)}</div>
             <h4 style="margin-top:22px">关联项目</h4>
             <ul>{topic.data.relatedProjects.map((id) => { const p = projectById.get(id); return p && <li><a href={`/projects/${p.slug}/`}>{p.shortTitle}</a></li>; })}</ul>
-            <h4>仍需回答</h4><ul>{topic.data.openQuestions.map((item) => <li>{item}</li>)}</ul>
+            <h4>我还在思考</h4><ul>{topic.data.openQuestions.map((item) => <li>{item}</li>)}</ul>
           </article>
         ))}
       </div>
