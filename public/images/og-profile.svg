@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">李宗泽的工程研究主页</title>
+  <desc id="desc">西安交通大学动力工程及工程热物理博士候选人，研究地下能源、岩石力学与油气管网。</desc>
+  <defs>
+    <linearGradient id="ground" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#10202f"/>
+      <stop offset="1" stop-color="#193247"/>
+    </linearGradient>
+    <pattern id="grid" width="42" height="42" patternUnits="userSpaceOnUse">
+      <path d="M42 0H0V42" fill="none" stroke="#d5e1e7" stroke-opacity=".08"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#ground)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <path d="M735 505C825 408 918 453 1018 344s138-72 182-102" fill="none" stroke="#72c6ca" stroke-width="8" stroke-linecap="round" opacity=".72"/>
+  <path d="M735 536C842 469 923 517 1032 421s121-70 168-61" fill="none" stroke="#8dbad5" stroke-width="3" stroke-linecap="round" opacity=".55"/>
+  <circle cx="825" cy="443" r="12" fill="#f0a477"/>
+  <circle cx="1018" cy="344" r="12" fill="#f0a477"/>
+  <path d="M887 96h237v152H887z" fill="none" stroke="#afc4ce" stroke-width="2" opacity=".35"/>
+  <path d="M925 220v-72m55 72v-110m55 110v-45m55 45V128" stroke="#afc4ce" stroke-width="8" stroke-linecap="square" opacity=".52"/>
+  <rect x="76" y="72" width="74" height="8" rx="4" fill="#d06a32"/>
+  <text x="76" y="190" fill="#f8fbfc" font-size="80" font-weight="700" font-family="Noto Sans SC, Source Han Sans SC, Microsoft YaHei, sans-serif">李宗泽</text>
+  <text x="78" y="248" fill="#d5e1e7" font-size="30" font-family="Noto Sans SC, Source Han Sans SC, Microsoft YaHei, sans-serif">动力工程及工程热物理 · 博士候选人</text>
+  <line x1="78" y1="306" x2="650" y2="306" stroke="#afc4ce" stroke-opacity=".46"/>
+  <g fill="#edf2f4" font-size="28" font-family="Noto Sans SC, Source Han Sans SC, Microsoft YaHei, sans-serif">
+    <text x="78" y="374">地下能源与增强型地热系统</text>
+    <text x="78" y="430">岩石力学、裂缝颗粒输运与 CFD–DEM</text>
+    <text x="78" y="486">油气管网仿真、优化与工业智能</text>
+  </g>
+  <text x="78" y="560" fill="#f0a477" font-size="22" font-family="JetBrains Mono, Cascadia Code, monospace" letter-spacing="2">RESEARCH · SIMULATION · VALIDATION</text>
+</svg>

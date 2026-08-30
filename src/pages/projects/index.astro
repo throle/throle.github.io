@@ -1,0 +1,87 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+
+const projects = (await getCollection('projects')).sort((a, b) => {
+  if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
+  return (a.data.featuredOrder ?? 99) - (b.data.featuredOrder ?? 99);
+});
+const domains = [...new Set(projects.flatMap((p) => p.data.domains))];
+const methods = [...new Set(projects.flatMap((p) => p.data.methods))];
+const types = [...new Set(projects.map((p) => p.data.projectType))];
+const levels = [...new Set(projects.map((p) => p.data.publicLevel))];
+---
+
+<BaseLayout title="项目归档｜李宗泽" description="七个地热、热工、管网仿真、数据与工业软件项目，明确个人参与、团队边界、验证和结果限制。">
+  <header class="page-hero"><div class="container"><nav class="breadcrumbs" aria-label="面包屑"><a href="/">首页</a> / 项目</nav><p class="eyebrow">PROJECT ARCHIVE · 7</p><h1>项目归档</h1><p class="lede">按工程领域、方法、类型与公开程度组合筛选。筛选只是阅读工具，七个项目均保留在无脚本页面中。</p></div></header>
+  <section class="section">
+    <div class="container">
+      <div class="filter-panel" aria-labelledby="filter-title" data-project-filters>
+        <h2 id="filter-title" style="font-size:1.2rem">组合筛选</h2>
+        {[
+          ['domain', '领域', domains],
+          ['method', '方法', methods],
+          ['type', '类型', types],
+          ['level', '公开', levels]
+        ].map(([group, label, values]) => (
+          <div class="filter-group">
+            <span class="filter-label">{label}</span>
+            <div class="filter-buttons" role="group" aria-label={`${label}筛选`}>
+              {(values as string[]).map((value) => <button class="filter-button" type="button" aria-pressed="false" data-filter-group={group} data-filter-value={value}>{value}</button>)}
+            </div>
+          </div>
+        ))}
+        <div class="button-row" style="margin-top:12px"><button class="button secondary" type="button" data-filter-reset>清除筛选</button></div>
+        <p class="filter-status" aria-live="polite" data-filter-status>显示全部7个项目</p>
+      </div>
+      <div class="project-grid" data-project-grid>
+        {projects.map((project) => <ProjectCard project={project} />)}
+        <p class="empty-state" data-filter-empty hidden>没有同时满足这些条件的项目。请减少筛选条件。</p>
+      </div>
+    </div>
+  </section>
+  <script is:inline>
+    (() => {
+      const panel = document.querySelector('[data-project-filters]');
+      if (!panel) return;
+      const buttons = Array.from(panel.querySelectorAll('[data-filter-group]'));
+      const cards = Array.from(document.querySelectorAll('[data-project-card]'));
+      const status = panel.querySelector('[data-filter-status]');
+      const empty = document.querySelector('[data-filter-empty]');
+      const active = new Map();
+      const cardValue = (card, group) => group === 'domain' ? card.dataset.domains : group === 'method' ? card.dataset.methods : group === 'type' ? card.dataset.type : card.dataset.level;
+      const apply = () => {
+        let visible = 0;
+        cards.forEach((card) => {
+          const matches = [...active.entries()].every(([group, values]) => values.size === 0 || [...values].some((value) => (cardValue(card, group) || '').split('|').includes(value)));
+          card.hidden = !matches;
+          if (matches) visible += 1;
+        });
+        if (status) status.textContent = `显示${visible}个项目，共${cards.length}个`;
+        if (empty) empty.hidden = visible !== 0;
+      };
+      buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const group = button.dataset.filterGroup;
+          const value = button.dataset.filterValue;
+          if (!active.has(group)) active.set(group, new Set());
+          const values = active.get(group);
+          if (values.has(value)) { values.delete(value); button.setAttribute('aria-pressed', 'false'); }
+          else { values.add(value); button.setAttribute('aria-pressed', 'true'); }
+          apply();
+        });
+      });
+      panel.querySelector('[data-filter-reset]')?.addEventListener('click', () => {
+        active.clear(); buttons.forEach((button) => button.setAttribute('aria-pressed', 'false')); apply();
+      });
+      const params = new URLSearchParams(location.search);
+      for (const group of ['domain', 'method', 'type', 'level']) {
+        const requested = params.get(group);
+        if (!requested) continue;
+        const button = buttons.find((item) => item.dataset.filterGroup === group && (item.dataset.filterValue === requested || item.dataset.filterValue.includes(requested)));
+        button?.click();
+      }
+    })();
+  </script>
+</BaseLayout>

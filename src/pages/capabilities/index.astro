@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const tools = await getCollection('tools');
+const projectLinks: Record<string, string[]> = {
+  experiment: ['/projects/egs-multifield-diversion/', '/projects/deep-geothermal-stimulation/'],
+  mechanism: ['/projects/deep-geothermal-stimulation/', '/projects/solar-thermal-storage/'],
+  simulation: ['/projects/egs-multifield-diversion/', '/projects/liquid-pipeline-platform/'],
+  validation: ['/projects/liquid-pipeline-platform/', '/projects/gas-network-forecast/'],
+  engineering: ['/projects/crude-pipeline-optimization/', '/projects/gas-leak-dataset/'],
+  delivery: ['/projects/liquid-pipeline-platform/', '/projects/gas-network-forecast/']
+};
+---
+
+<BaseLayout title="能力与工具｜李宗泽" description="按实验、建模、求解、验证、工程分析和交付组织的能力链，以及实际形成的科研工具工作流。">
+  <header class="page-hero"><div class="container"><nav class="breadcrumbs" aria-label="面包屑"><a href="/">首页</a> / 能力</nav><p class="eyebrow">CAPABILITIES</p><h1>能力与工具</h1><p class="lede">这里不使用百分比、自评分或技能墙。每项能力都回到项目、输入输出、验证方法和限制。</p></div></header>
+  <section class="section">
+    <div class="container publication-list">
+      {[
+        ['experiment','实验与数据','设计工况、试样与观测链；对异常、单位、同步和重复性负责。'],
+        ['mechanism','机理与建模','从守恒、物性和边界条件建立可解释模型，先写假设再讨论结果。'],
+        ['simulation','数值求解','使用CFD/CFD–DEM、一维水热力和工程算法连接复杂系统与可计算问题。'],
+        ['validation','验证与质量控制','以实验、理论算例、朴素基线、商业软件或匿名现场数据建立对照。'],
+        ['engineering','工程分析','将设备、约束、控制和业务目标组织为工况、任务和结果解释。'],
+        ['delivery','报告与工具交付','形成测试用例、图表、报告、界面支持和可复用工作流。']
+      ].map(([id, title, text], index) => (
+        <article class="publication-item" id={id}><span class="micro mono">0{index + 1}</span><h2>{title}</h2><p>{text}</p><p class="micro">项目证据：{projectLinks[id].map((href, i) => <><a href={href}>案例{i + 1}</a>{i === 0 ? ' · ' : ''}</>)}</p></article>
+      ))}
+    </div>
+  </section>
+  <section class="section surface">
+    <div class="container">
+      <p class="eyebrow">TOOLS</p><h2>已经形成的工作流</h2>
+      <div class="project-grid" style="margin-top:32px">
+        {tools.map((tool) => (
+          <article class="project-card"><div class="card-body"><div class="tag-row"><span class="status">{tool.data.toolType}</span><span class="status warning">{tool.data.status}</span></div><h3>{tool.data.title}</h3><p>{tool.data.summary}</p><p class="role-line">{tool.data.personalRole}</p><h4>输入 → 输出</h4><p class="micro">{tool.data.inputs.join('、')} → {tool.data.outputs.join('、')}</p><h4>验证</h4><ul>{tool.data.verification.map((item) => <li>{item}</li>)}</ul><h4>限制</h4><ul>{tool.data.limitations.map((item) => <li>{item}</li>)}</ul></div></article>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

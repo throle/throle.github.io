@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const topics = await getCollection('research');
+const projects = await getCollection('projects');
+const projectById = new Map(projects.map((p) => [p.data.id, p.data]));
+---
+
+<BaseLayout title="研究地图｜李宗泽" description="从深层地热储层改造、裂缝颗粒输运到油气管网仿真与数据分析的研究关系图。">
+  <header class="page-hero"><div class="container"><nav class="breadcrumbs" aria-label="面包屑"><a href="/">首页</a> / 研究</nav><p class="eyebrow">RESEARCH MAP</p><h1>研究地图</h1><p class="lede">研究不是领域标签的并列，而是从对象与边界出发，经由实验、机理、仿真、数据和验证，形成工程解释与交付。</p></div></header>
+  <section class="section">
+    <div class="container">
+      <div class="map-grid">
+        <article class="map-stage"><h2>储层改造</h2><p>高温岩石损伤、裂纹形成与暂堵转向共同决定人工缝网。</p><a href="/projects/deep-geothermal-stimulation/">项目03 →</a></article>
+        <article class="map-stage"><h2>裂缝与采热</h2><p>颗粒输运、裂缝传热和岩样注采把局部机制连接到采热评价。</p><a href="/projects/egs-multifield-diversion/">项目01 →</a></article>
+        <article class="map-stage"><h2>管网与智能</h2><p>物理仿真形成数据和约束，控制、优化与时序方法支撑运行分析。</p><a href="/projects/liquid-pipeline-platform/">项目07 →</a></article>
+      </div>
+    </div>
+  </section>
+  <section class="section surface">
+    <div class="container">
+      <p class="eyebrow">TOPICS · 3</p><h2>三个研究专题</h2>
+      <div class="publication-list" style="margin-top:32px">
+        {topics.map((topic) => (
+          <article class="publication-item">
+            <span class="status warning">{topic.data.publicLevel}</span>
+            <h3>{topic.data.title}</h3>
+            <p class="lede">{topic.data.question}</p>
+            <p>{topic.data.scope}</p>
+            <div class="tag-row">{topic.data.methods.map((item) => <span class="tag">{item}</span>)}</div>
+            <h4 style="margin-top:22px">关联项目</h4>
+            <ul>{topic.data.relatedProjects.map((id) => { const p = projectById.get(id); return p && <li><a href={`/projects/${p.slug}/`}>{p.shortTitle}</a></li>; })}</ul>
+            <h4>仍需回答</h4><ul>{topic.data.openQuestions.map((item) => <li>{item}</li>)}</ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+  <section class="section"><div class="container contact-panel"><div><h2>跨专题能力：高温储换热</h2><p>光热项目独立于地热储层主线，但共享传热、热应力、储热和动态控制方法。</p></div><a class="button" href="/projects/solar-thermal-storage/">查看项目02</a></div></section>
+</BaseLayout>

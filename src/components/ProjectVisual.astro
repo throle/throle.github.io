@@ -1,0 +1,110 @@
+---
+interface Props {
+  variant: 'geothermal' | 'solar' | 'rock' | 'oil-opt' | 'gas-leak' | 'gas-forecast' | 'liquid-pipe';
+  alt: string;
+}
+const { variant, alt } = Astro.props;
+---
+
+<svg class="project-visual" viewBox="0 0 600 400" role="img" aria-label={alt} xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id={`grid-${variant}`} width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" class="line thin" opacity="0.15" />
+    </pattern>
+    <linearGradient id={`heat-${variant}`} x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="var(--geothermal-500)" stop-opacity=".8" />
+      <stop offset="1" stop-color="var(--geothermal-700)" stop-opacity=".18" />
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill={`url(#grid-${variant})`} />
+
+  {variant === 'geothermal' && (
+    <g>
+      <path d="M70 90H530V330H70Z" class="paper" />
+      <path d="M70 145L235 170L325 130L530 175M70 250L210 220L355 270L530 225" class="line" />
+      <path d="M95 190C175 150 250 235 330 190S475 150 515 195" class="line" style="color:var(--flow-700)" />
+      <g class="hot"><circle cx="160" cy="182" r="10"/><circle cx="205" cy="191" r="8"/><circle cx="250" cy="198" r="11"/><circle cx="300" cy="192" r="7"/></g>
+      <path d="M105 330V70M495 70V330" class="line" />
+      <path d="M105 88l-12 22h24zM495 312l-12-22h24z" class="flow" />
+      <text x="86" y="56" fill="currentColor" font-size="18">注入</text><text x="470" y="358" fill="currentColor" font-size="18">采出</text>
+    </g>
+  )}
+
+  {variant === 'solar' && (
+    <g>
+      <circle cx="90" cy="85" r="34" fill={`url(#heat-${variant})`} />
+      <path d="M138 93H245M355 93H470M515 130V265M470 305H355M245 305H130M86 265V130" class="line" />
+      <rect x="245" y="55" width="110" height="78" rx="8" class="paper" /><text x="270" y="100" fill="currentColor" font-size="18">吸热</text>
+      <rect x="470" y="130" width="92" height="135" rx="45" class="paper" /><text x="488" y="204" fill="currentColor" font-size="18">储热</text>
+      <rect x="245" y="266" width="110" height="78" rx="8" class="paper" /><text x="270" y="311" fill="currentColor" font-size="18">换热</text>
+      <rect x="38" y="130" width="92" height="135" rx="8" class="paper" /><path d="M58 225l20-42 16 26 18-50" class="line"/><text x="55" y="250" fill="currentColor" font-size="16">调峰</text>
+      <path d="M208 84l24 9-24 9M423 84l24 9-24 9M524 280l-9 24-9-24M392 296l-24 9 24 9M177 296l-24 9 24 9M77 119l9-24 9 24" class="flow" />
+    </g>
+  )}
+
+  {variant === 'rock' && (
+    <g>
+      <path d="M205 70H395L430 320H170Z" class="paper" />
+      <path d="M290 82l-35 92 68 42-52 95" class="line" style="color:var(--geothermal-700)" />
+      <path d="M300 20V60M275 45l25 20 25-20M300 380V340M275 355l25-20 25 20" class="line" />
+      <path d="M72 120h86M72 160h68M72 200h90M440 115h88M460 155h68M438 195h90" class="line thin" />
+      <circle cx="250" cy="175" r="7" class="hot"/><circle cx="322" cy="215" r="7" class="hot"/><circle cx="270" cy="310" r="7" class="hot"/>
+      <path d="M90 285c35-35 60 20 92-15M418 285c35-35 60 20 92-15" class="line" style="color:var(--flow-700)" />
+      <text x="60" y="330" fill="currentColor" font-size="16">声发射</text><text x="444" y="330" fill="currentColor" font-size="16">DIC</text>
+    </g>
+  )}
+
+  {variant === 'oil-opt' && (
+    <g>
+      <path d="M64 200H536" class="line" stroke-width="10" />
+      <g class="paper"><rect x="72" y="150" width="80" height="100" rx="6"/><rect x="260" y="150" width="80" height="100" rx="6"/><rect x="448" y="150" width="80" height="100" rx="6"/></g>
+      <path d="M100 205h28M288 205h28M476 205h28" class="line" />
+      <path d="M118 205l-18-14v28zM306 205l-18-14v28zM494 205l-18-14v28z" class="flow" />
+      <path d="M105 110C190 36 300 72 324 105S445 135 493 76" class="line" style="color:var(--geothermal-700)"/>
+      <circle cx="105" cy="110" r="9" class="hot"/><circle cx="324" cy="105" r="9" class="hot"/><circle cx="493" cy="76" r="9" class="hot"/>
+      <text x="218" y="318" fill="currentColor" font-size="18">仿真 → 约束 → 方案搜索</text>
+    </g>
+  )}
+
+  {variant === 'gas-leak' && (
+    <g>
+      <path d="M70 205H525M150 205V115H290V205M365 205V300H495" class="line" stroke-width="8" />
+      <g class="pipe"><circle cx="70" cy="205" r="12"/><circle cx="150" cy="205" r="12"/><circle cx="290" cy="205" r="12"/><circle cx="365" cy="205" r="12"/><circle cx="525" cy="205" r="12"/></g>
+      <path d="M410 292c-18-30-6-56 8-70 15 17 25 39 10 69" fill="none" stroke="var(--geothermal-500)" stroke-width="7" />
+      <path d="M66 82h70v42H66zM180 60h70v42h-70zM294 82h70v42h-70zM408 60h70v42h-70z" class="paper" />
+      <text x="83" y="110" fill="currentColor" font-size="15">工况</text><text x="196" y="88" fill="currentColor" font-size="15">任务</text><text x="309" y="110" fill="currentColor" font-size="15">时序</text><text x="423" y="88" fill="currentColor" font-size="15">标签</text>
+      <path d="M136 103h35M250 82h35M364 103h35" class="line thin" />
+    </g>
+  )}
+
+  {variant === 'gas-forecast' && (
+    <g>
+      <path d="M55 116h150v92H55zM55 230h150v92H55z" class="paper" />
+      <path d="M75 175c24-20 42 12 62-8s35-27 52 5M75 285c18-10 35 7 52-4s35-17 62 3" class="line" style="color:var(--flow-700)" />
+      <path d="M205 160H270M205 276H270" class="line" />
+      <rect x="270" y="132" width="105" height="170" rx="18" class="paper" />
+      <path d="M295 170h56M295 200h56M295 230h56M295 260h56" class="line thin" />
+      <text x="292" y="114" fill="currentColor" font-size="16">LSTM</text>
+      <path d="M375 216h64" class="line" />
+      <path d="M439 125h110v180H439z" class="paper" />
+      <path d="M460 273c18-83 38-12 65-117" class="line" style="color:var(--geothermal-700)" />
+      <path d="M460 260c25-35 42-45 65-52" class="line thin" />
+      <text x="455" y="330" fill="currentColor" font-size="16">预测与基线</text>
+    </g>
+  )}
+
+  {variant === 'liquid-pipe' && (
+    <g>
+      <path d="M54 205H546" class="line" stroke-width="12" />
+      <path d="M54 205h215" stroke="var(--flow-700)" stroke-width="10"/><path d="M269 205h277" stroke="var(--geothermal-500)" stroke-width="10"/>
+      <g class="paper"><rect x="65" y="156" width="74" height="98" rx="5"/><rect x="461" y="156" width="74" height="98" rx="5"/></g>
+      <circle cx="236" cy="205" r="19" class="paper"/><path d="M226 205h20M236 195v20" class="line thin"/>
+      <path d="M355 205V102H468" class="line" />
+      <rect x="468" y="66" width="82" height="72" rx="7" class="paper" />
+      <text x="487" y="109" fill="currentColor" font-size="18">PID</text>
+      <path d="M505 138v42" class="line thin" />
+      <path d="M175 305h250" class="line thin"/><circle cx="210" cy="305" r="8" class="hot"/><circle cx="300" cy="305" r="8" class="flow"/><circle cx="390" cy="305" r="8" class="pipe"/>
+      <text x="205" y="342" fill="currentColor" font-size="16">理论 · 商软 · 匿名工况</text>
+    </g>
+  )}
+</svg>

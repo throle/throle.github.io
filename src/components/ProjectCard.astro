@@ -1,0 +1,22 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ProjectVisual from './ProjectVisual.astro';
+interface Props { project: CollectionEntry<'projects'>; }
+const { project } = Astro.props;
+const p = project.data;
+---
+
+<article class="project-card" data-project-card data-project-id={p.id} data-domains={p.domains.join('|')} data-methods={p.methods.join('|')} data-type={p.projectType} data-level={p.publicLevel}>
+  <div class="card-visual">
+    <ProjectVisual variant={p.visual} alt={`${p.shortTitle}的匿名工程示意图`} />
+  </div>
+  <div class="card-body">
+    <div class="tag-row"><span class="status">{p.projectType}</span><span class:list={['status', p.publicLevel !== '完整公开' && 'warning']}>{p.publicLevel}</span></div>
+    <h3><a href={`/projects/${p.slug}/`}>{p.title}</a></h3>
+    <p>{p.problem}</p>
+    <p class="role-line"><strong>本人参与：</strong>{p.personalRole}</p>
+    <div class="tag-row">{p.methods.slice(0, 3).map((item) => <span class="tag">{item}</span>)}</div>
+    <p class="project-result"><strong>产物：</strong>{p.deliverables.slice(0, 3).join('、')}</p>
+    <a class="detail-link" href={`/projects/${p.slug}/`} aria-label={`查看${p.title}技术详情`}>查看技术详情 →</a>
+  </div>
+</article>

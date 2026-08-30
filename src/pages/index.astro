@@ -1,0 +1,160 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import PublicationItem from '../components/PublicationItem.astro';
+import { site } from '../data/site/site';
+
+const projects = await getCollection('projects');
+const featuredProjects = projects.filter((p) => p.data.featured).sort((a, b) => (a.data.featuredOrder ?? 99) - (b.data.featuredOrder ?? 99));
+const publications = (await getCollection('publications')).filter((p) => p.data.featured).sort((a, b) => b.data.year - a.data.year);
+const tools = (await getCollection('tools')).filter((t) => t.data.featured);
+---
+
+<BaseLayout>
+  <section class="hero">
+    <div class="container hero-inner">
+      <div>
+        <p class="eyebrow">UNDERGROUND ENERGY · PIPELINE SYSTEMS</p>
+        <h1>李宗泽</h1>
+        <p class="lede">西安交通大学动力工程及工程热物理博士候选人。面向地下能源与油气管网中的复杂传热、流动、岩石破裂和运行问题，连接实验研究、数值仿真、数据分析与工程验证。</p>
+        <div class="tag-row" aria-label="核心研究方向">
+          <span class="tag">地热与岩石力学</span>
+          <span class="tag">CFD/CAE与多相流</span>
+          <span class="tag">油气管网与工业智能</span>
+        </div>
+        <div class="button-row">
+          <a class="button" href="#featured-projects">查看精选项目</a>
+          <a class="button secondary" href="/research/">查看研究地图</a>
+        </div>
+        <p class="micro" style="margin-top:22px"><a href={`mailto:${site.email}`}>{site.email}</a>　·　<a href={site.github}>GitHub @throle</a></p>
+      </div>
+      <div>
+        <figure class="portrait-frame">
+          <img src="/images/avatar.jpg" width="143" height="177" alt="李宗泽的正式证件照" loading="eager" decoding="async" />
+        </figure>
+        <p class="portrait-note">动力工程及工程热物理 · 2027届</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-compact">
+    <div class="container facts-grid" aria-label="可信度摘要">
+      <a class="fact" href="/about/"><strong>能源动力交叉背景</strong><span>油气储运工程本科，动力工程及工程热物理硕博连读</span></a>
+      <a class="fact" href="/publications/"><strong>第一作者成果</strong><span>2篇SCI与1篇中文核心已发表；在投工作单独标识</span></a>
+      <a class="fact" href="/projects/?type=基金"><strong>基金项目参与</strong><span>参与国家自然科学基金重点项目与面上项目研究</span></a>
+      <a class="fact" href="/projects/?domain=油气管网"><strong>工程项目参与</strong><span>覆盖管网仿真、控制、优化、时序预测与软件验证</span></a>
+    </div>
+  </section>
+
+  <section class="section surface" id="research-map">
+    <div class="container">
+      <p class="eyebrow">RESEARCH MAP</p>
+      <h2>从工程对象到可验证产出</h2>
+      <p class="lede">不同项目共享同一条问题链：识别对象与边界，选择实验和模型，建立验证基线，再形成可解释的工程产物。</p>
+      <div class="map-grid" style="margin-top:36px">
+        <article class="map-stage">
+          <h3>01 · 工程对象</h3>
+          <ul>
+            <li><a href="/projects/?domain=地热">深部地热储层</a></li>
+            <li><a href="/projects/?domain=CFD与多相流">裂缝颗粒输运</a></li>
+            <li><a href="/projects/?domain=热工与储热">高温储换热系统</a></li>
+            <li><a href="/projects/?domain=油气管网">油气管网</a></li>
+          </ul>
+        </article>
+        <article class="map-stage">
+          <h3>02 · 研究方法</h3>
+          <ul>
+            <li><a href="/projects/?method=实验">实验表征</a></li>
+            <li><a href="/projects/?method=机理分析">机理分析</a></li>
+            <li><a href="/projects/?method=数值仿真">数值仿真</a></li>
+            <li><a href="/projects/?method=数据处理">数据驱动</a></li>
+          </ul>
+        </article>
+        <article class="map-stage">
+          <h3>03 · 工程产出</h3>
+          <ul>
+            <li>参数与机制规律</li>
+            <li>模型验证与边界</li>
+            <li>运行分析与测试</li>
+            <li>技术报告与工具交付</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="featured-projects">
+    <div class="container">
+      <p class="eyebrow">SELECTED CASES · 4</p>
+      <h2>精选项目</h2>
+      <p class="lede">四个入口覆盖地热机理、管网仿真、时序算法与软件验证。每个案例都单独说明本人参与和团队边界。</p>
+      <div class="project-grid" style="margin-top:36px">
+        {featuredProjects.map((project) => <ProjectCard project={project} />)}
+      </div>
+      <div class="button-row"><a class="button secondary" href="/projects/">查看七个项目完整归档</a></div>
+    </div>
+  </section>
+
+  <section class="section muted-surface">
+    <div class="container">
+      <p class="eyebrow">CAPABILITY WORKFLOW</p>
+      <h2>能力不是百分比，而是一条可检查的工作流</h2>
+      <div class="workflow" style="margin-top:34px">
+        <a href="/capabilities/#experiment">实验与数据</a>
+        <a href="/capabilities/#mechanism">机理与建模</a>
+        <a href="/capabilities/#simulation">数值求解</a>
+        <a href="/capabilities/#validation">验证与质量控制</a>
+        <a href="/capabilities/#engineering">工程分析</a>
+        <a href="/capabilities/#delivery">报告与工具交付</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section surface">
+    <div class="container">
+      <p class="eyebrow">PUBLICATIONS</p>
+      <h2>代表成果</h2>
+      <p class="lede">已发表与在投严格分开；仅链接可核验的正式页面，不托管出版商全文。</p>
+      <div class="publication-list" style="margin-top:32px">
+        {publications.map((publication) => <PublicationItem publication={publication} />)}
+      </div>
+      <div class="button-row"><a class="button secondary" href="/publications/">查看成果口径与完整列表</a></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">TOOLS & PRACTICE</p>
+      <h2>科研工具与可复用工作流</h2>
+      <div class="project-grid" style="margin-top:32px">
+        {tools.map((tool) => (
+          <article class="project-card"><div class="card-body"><span class="status">{tool.data.toolType}</span><h3>{tool.data.title}</h3><p>{tool.data.summary}</p><p class="role-line">{tool.data.personalRole}</p><p class="micro">验证：{tool.data.verification.join('；')}</p><a class="detail-link" href="/capabilities/">查看能力与限制 →</a></div></article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section surface">
+    <div class="container project-detail-grid">
+      <div>
+        <p class="eyebrow">TEACHING & COLLABORATION</p>
+        <h2>教学、指导与多人协作</h2>
+        <p class="lede">有课程助教与作业批改经历，也参与本科生指导和竞赛指导；在多项目协作中重视任务边界、输入输出和材料口径一致。</p>
+      </div>
+      <ul>
+        <li>课程助教与作业批改</li>
+        <li>本科生科研指导</li>
+        <li>竞赛指导与问题拆解</li>
+        <li>跨实验、仿真、数据与报告协作</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container contact-panel">
+      <div><h2>讨论研究、工程仿真或技术岗位</h2><p>公开联系只使用邮箱与GitHub；本站不收集访客信息。</p></div>
+      <div class="button-row" style="margin-top:0"><a class="button" href={`mailto:${site.email}`}>邮件联系</a><a class="button secondary" href={site.github}>GitHub</a></div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,21 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../data/site/site';
+const profile = (await getCollection('about'))[0];
+if (!profile) throw new Error('缺少about/profile内容条目');
+const { Content } = await render(profile);
+---
+
+<BaseLayout title="关于｜李宗泽" description="李宗泽的教育背景、研究兴趣、教学协作与公开联系方式。">
+  <header class="page-hero"><div class="container"><nav class="breadcrumbs" aria-label="面包屑"><a href="/">首页</a> / 关于</nav><p class="eyebrow">ABOUT</p><h1>关于</h1><p class="lede">能源动力、油气储运与计算方法交叉背景，关注从机理认识到工程验证的完整工作链。</p></div></header>
+  <section class="section">
+    <div class="container project-detail-grid">
+      <article class="reading-width"><Content /></article>
+      <figure><div class="portrait-frame" style="box-shadow:14px 14px 0 color-mix(in srgb, var(--geothermal-500), transparent 76%)"><img src="/images/avatar.jpg" width="143" height="177" alt="李宗泽的正式证件照" /></div><figcaption class="micro" style="margin-top:18px">公开小头像；原图分辨率有限。</figcaption></figure>
+    </div>
+  </section>
+  <section class="section surface"><div class="container timeline"><div class="timeline-item"><time>2016—2020</time><div><h2>中国石油大学（北京）</h2><p>油气储运工程工学学士，辅修计算机科学与技术。</p></div></div><div class="timeline-item"><time>2020—2027（预计）</time><div><h2>西安交通大学</h2><p>动力工程及工程热物理硕博连读 / 博士候选人。</p></div></div></div></section>
+  <section class="section"><div class="container project-grid"><article class="boundary-card"><h2>研究兴趣</h2><ul><li>增强型地热系统与储层改造</li><li>岩石力学、裂缝颗粒输运与CFD–DEM</li><li>油气管网仿真、优化、控制与数据分析</li></ul></article><article class="boundary-card team"><h2>教学与协作</h2><ul><li>课程助教与作业批改</li><li>本科生指导与竞赛指导</li><li>多人项目中的任务、数据和材料协同</li></ul></article></div></section>
+  <section class="section surface"><div class="container contact-panel"><div><h2>公开联系</h2><p>欢迎就研究、仿真研发、测试验证、工业软件或教学协作交流。</p></div><div class="button-row" style="margin-top:0"><a class="button" href={`mailto:${site.email}`}>{site.email}</a><a class="button secondary" href={site.github}>GitHub @throle</a></div></div></section>
+</BaseLayout>

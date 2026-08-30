@@ -1,0 +1,24 @@
+---
+import { site } from '../data/site/site';
+const { currentPath = '/' } = Astro.props;
+const isCurrent = (href: string) => href === '/' ? currentPath === '/' : currentPath.startsWith(href);
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/" aria-label="李宗泽，返回首页">李宗泽</a>
+    <nav class="site-nav" id="site-menu" aria-label="主导航" data-open="false">
+      {site.nav.map((item) => (
+        <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
+      ))}
+    </nav>
+    <div class="header-actions">
+      <button class="icon-button" type="button" data-theme-toggle aria-label="切换为暗色主题" title="切换明暗主题">
+        <span aria-hidden="true" data-theme-icon>◐</span><span class="sr-only" data-theme-label>主题</span>
+      </button>
+      <button class="icon-button menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="site-menu" aria-label="打开导航菜单">
+        <span aria-hidden="true">☰</span>
+      </button>
+    </div>
+  </div>
+</header>

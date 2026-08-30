@@ -1,0 +1,205 @@
+---
+import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { site } from '../data/site/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonicalPath?: string;
+}
+
+const {
+  title = site.title,
+  description = site.description,
+  canonicalPath = Astro.url.pathname
+} = Astro.props;
+const canonical = new URL(canonicalPath, site.url).toString();
+const ogImage = new URL(site.ogImage, site.url).toString();
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  name: title,
+  url: canonical,
+  inLanguage: 'zh-CN',
+  mainEntity: {
+    '@type': 'Person',
+    name: '李宗泽',
+    url: site.url,
+    email: `mailto:${site.email}`,
+    sameAs: [site.github],
+    alumniOf: [
+      { '@type': 'CollegeOrUniversity', name: '中国石油大学（北京）' },
+      { '@type': 'CollegeOrUniversity', name: '西安交通大学' }
+    ],
+    knowsAbout: ['增强型地热系统', '岩石力学', 'CFD/CAE', '多相流', '油气管网仿真', '工程验证']
+  }
+};
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#10202f" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="profile" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="李宗泽 · 工程研究档案" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="李宗泽博士候选人研究主页：地下能源、岩石力学与油气管网" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
+    <title>{title}</title>
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      try {
+        const stored = localStorage.getItem('theme');
+        const preferred = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = stored || preferred;
+      } catch (_) {}
+    </script>
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
+    <div class="reading-progress" data-reading-progress hidden aria-hidden="true"></div>
+    <SiteHeader currentPath={Astro.url.pathname} />
+    <main id="main-content"><slot /></main>
+    <SiteFooter />
+
+    <dialog class="lightbox" id="site-lightbox" aria-labelledby="lightbox-title">
+      <div class="lightbox-head">
+        <strong id="lightbox-title">图件查看</strong>
+        <button class="lightbox-close" type="button" data-lightbox-close aria-label="关闭图件">×</button>
+      </div>
+      <div class="lightbox-content" data-lightbox-content></div>
+    </dialog>
+
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        const themeButton = document.querySelector('[data-theme-toggle]');
+        const updateThemeLabel = () => {
+          if (!themeButton) return;
+          const dark = root.dataset.theme === 'dark';
+          themeButton.setAttribute('aria-label', dark ? '切换为亮色主题' : '切换为暗色主题');
+          themeButton.setAttribute('title', dark ? '切换为亮色主题' : '切换为暗色主题');
+        };
+        updateThemeLabel();
+        themeButton?.addEventListener('click', () => {
+          const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try { localStorage.setItem('theme', next); } catch (_) {}
+          updateThemeLabel();
+        });
+
+        const menuButton = document.querySelector('[data-menu-toggle]');
+        const menu = document.querySelector('#site-menu');
+        let menuItems = [];
+        const closeMenu = (returnFocus = false) => {
+          if (!menu || !menuButton) return;
+          menu.dataset.open = 'false';
+          menuButton.setAttribute('aria-expanded', 'false');
+          menuButton.setAttribute('aria-label', '打开导航菜单');
+          document.body.classList.remove('menu-open');
+          if (returnFocus) menuButton.focus();
+        };
+        const openMenu = () => {
+          if (!menu || !menuButton) return;
+          menu.dataset.open = 'true';
+          menuButton.setAttribute('aria-expanded', 'true');
+          menuButton.setAttribute('aria-label', '关闭导航菜单');
+          document.body.classList.add('menu-open');
+          menuItems = Array.from(menu.querySelectorAll('a'));
+          menuItems[0]?.focus();
+        };
+        menuButton?.addEventListener('click', () => menu?.dataset.open === 'true' ? closeMenu() : openMenu());
+        menu?.addEventListener('click', (event) => { if (event.target.closest('a')) closeMenu(); });
+        addEventListener('resize', () => { if (innerWidth >= 768) closeMenu(); });
+        addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') {
+            if (menu?.dataset.open === 'true') closeMenu(true);
+            const dialog = document.querySelector('#site-lightbox');
+            if (dialog?.open) dialog.close();
+          }
+          if (event.key === 'Tab' && menu?.dataset.open === 'true' && menuItems.length) {
+            const first = menuItems[0];
+            const last = menuItems[menuItems.length - 1];
+            if (event.shiftKey && document.activeElement === first) { event.preventDefault(); menuButton?.focus(); }
+            else if (!event.shiftKey && document.activeElement === menuButton) { event.preventDefault(); first.focus(); }
+            else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); menuButton?.focus(); }
+          }
+        });
+
+        const progress = document.querySelector('[data-reading-progress]');
+        const article = document.querySelector('.article-shell');
+        if (progress && article) {
+          progress.hidden = false;
+          const update = () => {
+            const start = article.getBoundingClientRect().top + scrollY - innerHeight * .15;
+            const end = start + article.scrollHeight - innerHeight * .7;
+            const value = Math.max(0, Math.min(1, (scrollY - start) / Math.max(1, end - start)));
+            progress.style.transform = `scaleX(${value})`;
+          };
+          update();
+          addEventListener('scroll', update, { passive: true });
+          addEventListener('resize', update);
+        }
+
+        const tocLinks = Array.from(document.querySelectorAll('.toc a[href^="#"]'));
+        if (tocLinks.length && 'IntersectionObserver' in window) {
+          const sectionMap = new Map(tocLinks.map((link) => [link.getAttribute('href')?.slice(1), link]));
+          const observer = new IntersectionObserver((entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                tocLinks.forEach((link) => link.removeAttribute('aria-current'));
+                sectionMap.get(entry.target.id)?.setAttribute('aria-current', 'true');
+              }
+            }
+          }, { rootMargin: '-20% 0px -68% 0px' });
+          sectionMap.forEach((_, id) => { const section = document.getElementById(id); if (section) observer.observe(section); });
+        }
+
+        const lightbox = document.querySelector('#site-lightbox');
+        const lightboxContent = lightbox?.querySelector('[data-lightbox-content]');
+        const lightboxTitle = lightbox?.querySelector('#lightbox-title');
+        let lastTrigger = null;
+        document.querySelectorAll('[data-lightbox]').forEach((trigger) => {
+          trigger.addEventListener('click', () => {
+            if (!lightbox || !lightboxContent) return;
+            lastTrigger = trigger;
+            const visual = trigger.querySelector('.project-visual');
+            if (!visual) return;
+            lightboxContent.replaceChildren(visual.cloneNode(true));
+            if (lightboxTitle) lightboxTitle.textContent = trigger.dataset.lightboxTitle || '图件查看';
+            lightbox.showModal();
+            lightbox.querySelector('[data-lightbox-close]')?.focus();
+          });
+        });
+        lightbox?.querySelector('[data-lightbox-close]')?.addEventListener('click', () => lightbox.close());
+        lightbox?.addEventListener('click', (event) => { if (event.target === lightbox) lightbox.close(); });
+        lightbox?.addEventListener('close', () => lastTrigger?.focus());
+
+        document.querySelectorAll('[data-copy]').forEach((button) => {
+          button.addEventListener('click', async () => {
+            const value = button.dataset.copy;
+            if (!value) return;
+            try { await navigator.clipboard.writeText(value); button.textContent = '已复制'; }
+            catch (_) { button.textContent = value; }
+            setTimeout(() => { button.textContent = button.dataset.copyLabel || '复制'; }, 1600);
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

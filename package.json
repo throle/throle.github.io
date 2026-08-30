@@ -1,0 +1,22 @@
+{
+  "name": "throle-research-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "validate:content": "node scripts/validate-content.mjs",
+    "check": "astro check",
+    "build": "pnpm validate:content && astro check && astro build && node scripts/check-dist.mjs",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.0.0",
+    "@astrojs/sitemap": "^3.2.1",
+    "astro": "^5.0.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "typescript": "^5.7.2"
+  }
+}

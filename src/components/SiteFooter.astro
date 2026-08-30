@@ -1,0 +1,17 @@
+---
+import { site } from '../data/site/site';
+---
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <strong>李宗泽 · 工程研究档案</strong>
+      <p class="micro">2027届博士候选人 · 最后更新 {site.updatedAt}</p>
+    </div>
+    <div class="footer-links" aria-label="页脚链接">
+      <a href={`mailto:${site.email}`}>{site.email}</a>
+      <a href={site.github}>GitHub</a>
+      <a href="/privacy/">隐私说明</a>
+    </div>
+  </div>
+</footer>

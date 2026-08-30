@@ -1,0 +1,43 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PublicationItem from '../../components/PublicationItem.astro';
+const publications = (await getCollection('publications')).sort((a, b) => b.data.year - a.data.year);
+---
+
+<BaseLayout title="论文成果｜李宗泽" description="第一作者SCI、中文核心与在投研究方向，明确作者顺序、状态和可核验DOI。">
+  <header class="page-hero"><div class="container"><nav class="breadcrumbs" aria-label="面包屑"><a href="/">首页</a> / 成果</nav><p class="eyebrow">PUBLICATIONS</p><h1>论文成果</h1><p class="lede">作者顺序和状态按公开事实呈现。两篇SCI提供已核验DOI；中文核心官方链接待补；在投研究不公开稿件。</p></div></header>
+  <section class="section">
+    <div class="container">
+      <div class="filter-panel" data-publication-filters>
+        <h2 style="font-size:1.2rem">筛选成果</h2>
+        <div class="filter-buttons" role="group" aria-label="成果状态筛选">
+          <button class="filter-button" type="button" aria-pressed="true" data-pub-filter="all">全部</button>
+          <button class="filter-button" type="button" aria-pressed="false" data-pub-filter="已发表">已发表</button>
+          <button class="filter-button" type="button" aria-pressed="false" data-pub-filter="在投">在投</button>
+          <button class="filter-button" type="button" aria-pressed="false" data-pub-filter="第一作者">第一作者</button>
+        </div>
+      </div>
+      <div class="publication-list">{publications.map((p) => <PublicationItem publication={p} />)}</div>
+      <section class="section-compact reading-width">
+        <h2>状态与链接口径</h2>
+        <ul>
+          <li>已发表不等同于开放获取；本站只链接DOI，不镜像出版商PDF。</li>
+          <li>中文核心按用户确认已正式发表，官方页面、卷期与页码待核后补充。</li>
+          <li>JRMGE研究仅写方向与“在投”，不显示审稿信息或未公开稿件。</li>
+        </ul>
+      </section>
+    </div>
+  </section>
+  <script is:inline>
+    (() => {
+      const buttons = Array.from(document.querySelectorAll('[data-pub-filter]'));
+      const items = Array.from(document.querySelectorAll('[data-publication]'));
+      buttons.forEach((button) => button.addEventListener('click', () => {
+        buttons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+        const value = button.dataset.pubFilter;
+        items.forEach((item) => { item.hidden = value !== 'all' && item.dataset.status !== value && item.dataset.position !== value; });
+      }));
+    })();
+  </script>
+</BaseLayout>

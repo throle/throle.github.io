@@ -1,0 +1,67 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectVisual from '../../components/ProjectVisual.astro';
+import RoleBoundary from '../../components/RoleBoundary.astro';
+import ValidationCard from '../../components/ValidationCard.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({ params: { slug: project.data.slug }, props: { project } }));
+}
+
+const { project } = Astro.props;
+const p = project.data;
+const toc = [
+  ['summary', '项目摘要'], ['context', '类型与背景'], ['role', '本人参与与协作'], ['problem', '工程问题与目标'],
+  ['inputs', '输入、试样或工况'], ['workflow', '技术路线'], ['methods', '核心方法'], ['validation', '验证与质量控制'],
+  ['results', '主要结果与边界'], ['deliverables', '形成的产物'], ['visual', '图件与图注'], ['evidence', '公开证据'],
+  ['confidentiality', '保密边界'], ['capabilities', '可迁移能力'], ['questions', '可深入讨论的问题']
+];
+---
+
+<BaseLayout title={`${p.title}｜项目｜李宗泽`} description={p.summary} canonicalPath={`/projects/${p.slug}/`}>
+  <header class="project-detail-hero">
+    <div class="container">
+      <nav class="breadcrumbs" aria-label="面包屑"><a href="/">首页</a> / <a href="/projects/">项目</a> / {p.shortTitle}</nav>
+      <div class="project-detail-grid">
+        <div>
+          <div class="tag-row"><span class="status">{p.projectType}</span><span class="status warning">{p.publicLevel}</span><span class="tag">{p.status}</span></div>
+          <h1 style="margin-top:18px">{p.title}</h1>
+          <p class="lede">{p.summary}</p>
+          <p><strong>本人参与：</strong>{p.personalRole}</p>
+        </div>
+        <figure>
+          <button class="visual-button" type="button" data-lightbox data-lightbox-title={p.shortTitle} aria-label={`放大查看${p.shortTitle}匿名示意图`}>
+            <ProjectVisual variant={p.visual} alt={p.visualCaption} />
+            <figcaption>{p.visualCaption}</figcaption>
+          </button>
+        </figure>
+      </div>
+      <RoleBoundary personalRole={p.personalRole} collaborationBoundary={p.collaborationBoundary} />
+    </div>
+  </header>
+
+  <div class="section">
+    <div class="container article-shell">
+      <article class="article-content">
+        <section id="summary"><h2>项目摘要</h2><p>{p.summary}</p></section>
+        <section id="context"><h2>项目类型与合作背景</h2><p><strong>{p.projectType}</strong> · {p.organizationPublic} · {p.publicLevel}。</p><p>企业合作项目统一采用行业概括，不展示合作单位、财务信息、内部编号或系统名称。</p></section>
+        <section id="role"><h2>本人参与范围</h2><p>{p.personalRole}</p><h3>团队与协作边界</h3><p>{p.collaborationBoundary}</p></section>
+        <section id="problem"><h2>工程问题与目标</h2><p>{p.problem}</p><ul>{p.objectives.map((item) => <li>{item}</li>)}</ul></section>
+        <section id="inputs"><h2>输入数据、试样或工况</h2><ul>{p.inputs.map((item) => <li>{item}</li>)}</ul></section>
+        <section id="workflow"><h2>技术路线</h2><ol>{p.workflow.map((item) => <li>{item}</li>)}</ol></section>
+        <section id="methods"><h2>核心方法</h2><div class="tag-row">{p.methods.map((item) => <span class="tag">{item}</span>)}</div><p style="margin-top:20px">研究对象包括：{p.objects.join('、')}。</p></section>
+        <section id="validation"><h2>验证与质量控制</h2><ValidationCard validation={p.validation} limitations={p.limitations} /></section>
+        <section id="results"><h2>主要结果与结果边界</h2><ul>{p.results.map((item) => <li>{item}</li>)}</ul><p class="micro">结果只在上述输入、方法和验证范围内解释；未提供可靠基线的内容不展示具体提升率。</p></section>
+        <section id="deliverables"><h2>形成的产物</h2><ul>{p.deliverables.map((item) => <li>{item}</li>)}</ul></section>
+        <section id="visual"><h2>图件与图注</h2><figure><button class="visual-button" type="button" data-lightbox data-lightbox-title={p.shortTitle} aria-label={`放大查看${p.shortTitle}匿名示意图`}><ProjectVisual variant={p.visual} alt={p.visualCaption} /><figcaption>{p.visualCaption}</figcaption></button></figure></section>
+        <section id="evidence"><h2>公开证据</h2>{p.evidenceLinks.length ? <ul>{p.evidenceLinks.map((link) => <li><a href={link.url}>{link.label}</a> · {link.type} · 核验于{link.verifiedAt}</li>)}</ul> : <p>本页暂不提供项目内部材料链接；相关正式论文请从<a href="/publications/">成果页</a>核验。</p>}</section>
+        <section id="confidentiality"><h2>保密边界</h2><p>不公开企业名称、财务信息、内部系统名、真实拓扑、现场数据、未授权原图、项目文件或本地路径。代码原生示意图仅表达方法关系，不代表真实数据。</p></section>
+        <section id="capabilities"><h2>可迁移岗位能力</h2><div class="tag-row">{p.transferableCapabilities.map((item) => <span class="tag">{item}</span>)}</div></section>
+        <section id="questions"><h2>可深入讨论的问题</h2><ol>{p.discussionQuestions.map((item) => <li>{item}</li>)}</ol><div class="button-row"><a class="button secondary" href="/projects/">返回项目归档</a><a class="button secondary" href="/capabilities/">查看能力工作流</a></div></section>
+      </article>
+      <aside class="toc" aria-label="页内目录"><strong>阅读目录</strong>{toc.map(([id, label]) => <a href={`#${id}`}>{label}</a>)}</aside>
+    </div>
+  </div>
+</BaseLayout>

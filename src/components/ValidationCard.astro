@@ -1,0 +1,13 @@
+---
+const { validation, limitations } = Astro.props;
+---
+<div class="validation-card">
+  <div>
+    <h3>验证与质量控制</h3>
+    <ul>{validation.map((item: string) => <li>{item}</li>)}</ul>
+  </div>
+  <div>
+    <h3>适用范围与限制</h3>
+    <ul>{limitations.map((item: string) => <li>{item}</li>)}</ul>
+  </div>
+</div>
