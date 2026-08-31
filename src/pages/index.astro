@@ -27,7 +27,7 @@ const tools = (await getCollection('tools')).filter((t) => t.data.featured);
           <a class="button" href="#featured-projects">查看精选项目</a>
           <a class="button secondary" href="/research/">查看研究地图</a>
         </div>
-        <p class="micro" style="margin-top:22px"><a href={`mailto:${site.email}`}>{site.email}</a>　·　<a href={site.github}>GitHub @throle</a></p>
+        <p class="micro" style="margin-top:22px"><a href={`tel:${site.phoneHref}`}>{site.phone}</a>　·　<a href={`mailto:${site.email}`}>{site.email}</a>　·　<a href={site.github}>GitHub @throle</a></p>
       </div>
       <div>
         <figure class="portrait-frame">
@@ -154,8 +154,8 @@ const tools = (await getCollection('tools')).filter((t) => t.data.featured);
 
   <section class="section">
     <div class="container contact-panel">
-      <div><h2>欢迎联系我</h2><p>联系邮箱：<a href={`mailto:${site.email}`}>{site.email}</a></p></div>
-      <div class="button-row" style="margin-top:0"><a class="button" href={`mailto:${site.email}`}>发送邮件</a><a class="button secondary" href={site.github}>GitHub @throle</a></div>
+      <div><h2>欢迎联系我</h2><p>联系电话：<a href={`tel:${site.phoneHref}`}>{site.phone}</a><br />联系邮箱：<a href={`mailto:${site.email}`}>{site.email}</a></p></div>
+      <div class="button-row" style="margin-top:0"><a class="button" href={`tel:${site.phoneHref}`}>拨打电话</a><a class="button secondary" href={`mailto:${site.email}`}>发送邮件</a><a class="button secondary" href={site.github}>GitHub @throle</a></div>
     </div>
   </section>
 </BaseLayout>

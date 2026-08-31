@@ -9,6 +9,7 @@ import { site } from '../data/site/site';
       <p class="micro">西安交通大学博士研究生 · 预计2027年毕业 · 更新于 {site.updatedAt}</p>
     </div>
     <div class="footer-links" aria-label="页脚链接">
+      <a href={`tel:${site.phoneHref}`}>{site.phone}</a>
       <a href={`mailto:${site.email}`}>{site.email}</a>
       <a href={site.github}>GitHub</a>
       <a href="/privacy/">隐私说明</a>

@@ -27,7 +27,7 @@ const html = (await Promise.all(htmlFiles.map((file) => readFile(file, 'utf8')))
 const homeHtml = await readFile(join(dist, 'index.html'), 'utf8');
 if (/<form\b/i.test(html)) errors.push('构建产物含表单');
 if (/google-analytics|gtag\(|plausible|umami/i.test(html)) errors.push('构建产物含统计脚本');
-if (/\b1[3-9]\d{9}\b/.test(html)) errors.push('构建产物疑似含手机号');
+if (/\b(?!15801053205\b)1[3-9]\d{9}\b/.test(html)) errors.push('构建产物含未授权手机号');
 if (/昆仑数智|国家管网集团|东部原油储运/.test(html)) errors.push('构建产物含企业真实名称');
 if (/\.work(?:[\\/]|\b)/i.test(html)) errors.push('构建产物含.work内部路径');
 
@@ -41,6 +41,8 @@ if (!/<meta[^>]+name="twitter:card"[^>]+content="summary_large_image"/i.test(hom
 
 const jsonLd = homeHtml.match(/<script[^>]+type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/i)?.[1] ?? '';
 if (!/"sameAs":\["https:\/\/github\.com\/throle"\]/.test(jsonLd)) errors.push('JSON-LD未使用已核验GitHub sameAs');
+if (!/"telephone":"\+8615801053205"/.test(jsonLd)) errors.push('JSON-LD缺少已授权联系电话');
+if (!/href="tel:\+8615801053205"[^>]*>15801053205<\/a>/.test(homeHtml)) errors.push('首页缺少可拨打的联系电话');
 const footer = homeHtml.match(/<footer\b[\s\S]*?<\/footer>/i)?.[0] ?? '';
 const footerGithubCount = footer.match(/https:\/\/github\.com\/throle/g)?.length ?? 0;
 if (footerGithubCount !== 1) errors.push(`页脚GitHub入口应为1个，实际为${footerGithubCount}个`);

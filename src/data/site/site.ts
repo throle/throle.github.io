@@ -4,9 +4,11 @@ export const site = {
   description: '西安交通大学动力工程及工程热物理博士研究生，预计2027年毕业。研究复杂传热、流动、岩石破裂、管网仿真与工程验证。',
   url: 'https://throle.github.io',
   email: 'throle@163.com',
+  phone: '15801053205',
+  phoneHref: '+8615801053205',
   github: 'https://github.com/throle',
   ogImage: '/images/og-profile.svg',
-  updatedAt: '2026-08-29',
+  updatedAt: '2026-08-31',
   nav: [
     { href: '/projects/', label: '项目' },
     { href: '/research/', label: '研究' },

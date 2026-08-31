@@ -22,7 +22,7 @@ const textFiles = allPublicSourceFiles.filter((file) => /\.(astro|md|mdx|ts|js|m
 const texts = new Map(await Promise.all(textFiles.map(async (file) => [file, await readFile(file, 'utf8')])));
 
 const forbidden = [
-  [/\b1[3-9]\d{9}\b/g, '手机号'],
+  [/\b(?!15801053205\b)1[3-9]\d{9}\b/g, '未授权手机号'],
   [/1997\s*[年./-]\s*11\s*[月./-]\s*0?4/g, '完整出生日期'],
   [/中共党员|政治面貌|CET-?6|六级未通过/g, '私密身份或英语信息'],
   [/昆仑数智|国家管网集团|东部原油储运/g, '企业真实名称'],
@@ -92,6 +92,8 @@ if (!/venue: 岩土力学[\s\S]*status: 已发表/.test(publicationText)) errors
 if (!/venue: Journal of Rock Mechanics and Geotechnical Engineering[\s\S]*status: 在投/.test(publicationText)) errors.push('JRMGE研究未标记为在投');
 
 const renderedSource = [...texts.values()].join('\n');
+if (!renderedSource.includes("phone: '15801053205'")) errors.push('站点数据缺少已授权联系电话');
+if (!renderedSource.includes('tel:${site.phoneHref}')) errors.push('页面缺少可拨打的电话链接');
 const scopeViolations = [
   [/<form\b/i, '联系表单'], [/google-analytics|gtag\(|plausible|umami/i, '统计脚本'],
   [/聊天机器人|chatbot/i, '聊天机器人'], [/three\.js|<canvas\b/i, '3D或Canvas'],
