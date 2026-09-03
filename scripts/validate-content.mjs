@@ -86,8 +86,15 @@ for (const [id, attributionPattern] of expectedKernelAttribution) {
   if (!attributionPattern.test(text)) errors.push(`项目${id}缺少核心内核协作说明`);
 }
 
-const publicationText = (await Promise.all((await readdir(join(contentRoot, 'publications'))).map((name) => readFile(join(contentRoot, 'publications', name), 'utf8')))).join('\n');
-for (const doi of ['10.1063/5.0226595', '10.1016/j.powtec.2026.122245']) if (!publicationText.includes(doi)) errors.push(`缺少已核验DOI：${doi}`);
+const publicationFiles = (await readdir(join(contentRoot, 'publications'))).filter((name) => /\.mdx?$/.test(name));
+if (publicationFiles.length !== 9) errors.push(`论文文件应为9个，实际为${publicationFiles.length}个`);
+const publicationText = (await Promise.all(publicationFiles.map((name) => readFile(join(contentRoot, 'publications', name), 'utf8')))).join('\n');
+const verifiedDois = [
+  '10.1063/5.0226595', '10.1016/j.powtec.2026.122245', '10.1016/j.energy.2025.137736',
+  '10.1063/5.0196920', '10.1007/s11630-023-1812-0', '10.1016/j.energy.2024.131676', '10.1063/5.0235781'
+];
+for (const doi of verifiedDois) if (!publicationText.includes(doi)) errors.push(`缺少已核验DOI：${doi}`);
+for (const position of ['第二作者', '第四作者', '第十作者', '第九作者']) if (!publicationText.includes(`personalAuthorPosition: ${position}`)) errors.push(`共同作者论文缺少署名位置：${position}`);
 if (!/venue: 岩土力学[\s\S]*status: 已发表/.test(publicationText)) errors.push('中文核心未标记为已发表');
 if (!/venue: Journal of Rock Mechanics and Geotechnical Engineering[\s\S]*status: 在投/.test(publicationText)) errors.push('JRMGE研究未标记为在投');
 
@@ -106,4 +113,4 @@ if (errors.length) {
   errors.forEach((error) => console.error(`- ${error}`));
   process.exit(1);
 }
-console.log(`公开前内容校验通过：7个项目、${foundFeatured.size}个精选项目、2个已核验DOI；未发现设定的隐私与范围禁项。`);
+console.log(`公开前内容校验通过：7个项目、${foundFeatured.size}个精选项目、9篇论文、${verifiedDois.length}个已核验DOI；未发现设定的隐私与范围禁项。`);

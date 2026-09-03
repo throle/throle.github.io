@@ -3,16 +3,24 @@ import type { CollectionEntry } from 'astro:content';
 interface Props { publication: CollectionEntry<'publications'>; }
 const { publication } = Astro.props;
 const p = publication.data;
+const authorGroup = p.personalAuthorPosition === '第一作者' ? '第一作者' : '共同作者';
+const isPersonalAuthor = (author: string) => ['Zongze Li', 'Zong-ze Li', '李宗泽'].includes(author);
 ---
 
-<article class="publication-item" data-publication data-status={p.status} data-position={p.personalAuthorPosition} data-categories={p.categories.join('|')}>
+<article id={p.slug} class="publication-item" data-publication data-status={p.status} data-author-group={authorGroup} data-categories={p.categories.join('|')}>
   <div class="publication-meta">
     <span class:list={['status', p.status === '在投' && 'warning']}>{p.status}</span>
     <span class="tag">{p.personalAuthorPosition}</span>
     <span class="micro mono">{p.year}</span>
   </div>
   <h3>{p.officialUrl ? <a href={p.officialUrl}>{p.title}</a> : p.title}</h3>
-  <p class="authors">{p.authors.join('，')}</p>
-  <p>{p.venue} · {p.abstractPublic}</p>
+  <p class="authors">
+    {p.authors.map((author, index) => (
+      <>{index > 0 && '，'}{isPersonalAuthor(author) ? <strong>{author}</strong> : author}</>
+    ))}
+  </p>
+  <p class="publication-citation">{p.venue}{p.citationDetails && ` · ${p.citationDetails}`}</p>
+  <p>{p.abstractPublic}</p>
+  <p class="publication-contribution"><strong>我在其中的工作：</strong>{p.personalContribution}</p>
   {p.doi && <p class="micro mono">DOI：<a href={p.officialUrl}>{p.doi}</a></p>}
 </article>

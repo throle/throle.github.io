@@ -299,6 +299,9 @@ li + li { margin-top: 0.45em; }
 .publication-item { padding: 24px 26px; border-left: 4px solid var(--research-700); background: var(--paper-100); }
 .publication-item h3 { font-size: 1.08rem; overflow-wrap: anywhere; }
 .publication-item .authors { color: var(--text-600); font-size: .88rem; }
+.publication-item .authors strong { color: var(--text-900); }
+.publication-citation { margin-bottom: 8px; color: var(--text-700); font-weight: 700; }
+.publication-contribution { margin-top: 14px; padding: 12px 14px; border-left: 3px solid var(--geothermal-500); background: var(--paper-050); color: var(--text-700); }
 .publication-meta { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
 
 .page-hero { padding-block: 74px 58px; border-bottom: 1px solid var(--line-300); background: var(--paper-100); }

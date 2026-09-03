@@ -25,11 +25,18 @@ async function walk(dir) {
 const htmlFiles = (await walk(dist)).filter((file) => file.endsWith('.html'));
 const html = (await Promise.all(htmlFiles.map((file) => readFile(file, 'utf8')))).join('\n');
 const homeHtml = await readFile(join(dist, 'index.html'), 'utf8');
+const publicationsHtml = await readFile(join(dist, 'publications', 'index.html'), 'utf8');
 if (/<form\b/i.test(html)) errors.push('构建产物含表单');
 if (/google-analytics|gtag\(|plausible|umami/i.test(html)) errors.push('构建产物含统计脚本');
 if (/\b(?!15801053205\b)1[3-9]\d{9}\b/.test(html)) errors.push('构建产物含未授权手机号');
 if (/昆仑数智|国家管网集团|东部原油储运/.test(html)) errors.push('构建产物含企业真实名称');
 if (/\.work(?:[\\/]|\b)/i.test(html)) errors.push('构建产物含.work内部路径');
+const publicationCount = publicationsHtml.match(/data-publication(?:\s|>)/g)?.length ?? 0;
+if (publicationCount !== 9) errors.push(`论文成果页应显示9篇论文，实际为${publicationCount}篇`);
+for (const doi of ['10.1016/j.energy.2025.137736', '10.1063/5.0196920', '10.1007/s11630-023-1812-0', '10.1016/j.energy.2024.131676', '10.1063/5.0235781']) {
+  if (!publicationsHtml.includes(doi)) errors.push(`论文成果页缺少DOI：${doi}`);
+}
+if (!publicationsHtml.includes('data-pub-filter="共同作者"')) errors.push('论文成果页缺少共同作者筛选');
 
 const ogSvg = await readFile(join(dist, 'images', 'og-profile.svg'), 'utf8');
 if (!/<svg[^>]*\bwidth="1200"[^>]*\bheight="630"[^>]*\bviewBox="0 0 1200 630"/i.test(ogSvg)) errors.push('OG图片不是1200×630 SVG');

@@ -60,6 +60,7 @@ const publications = defineCollection({
     categories: z.array(z.string()),
     abstractPublic: z.string(),
     personalContribution: z.string(),
+    citationDetails: z.string().optional(),
     doi: z.string().optional(),
     officialUrl: z.string().url().optional(),
     relatedProjects: z.array(z.string()).default([]),

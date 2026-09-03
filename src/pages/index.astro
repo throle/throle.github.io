@@ -41,7 +41,7 @@ const tools = (await getCollection('tools')).filter((t) => t.data.featured);
   <section class="section-compact">
     <div class="container facts-grid" aria-label="可信度摘要">
       <a class="fact" href="/about/"><strong>能源动力交叉背景</strong><span>油气储运工程本科，动力工程及工程热物理硕博连读</span></a>
-      <a class="fact" href="/publications/"><strong>第一作者成果</strong><span>2篇SCI与1篇中文核心已发表；在投工作单独标识</span></a>
+      <a class="fact" href="/publications/"><strong>论文成果</strong><span>3篇第一作者论文和5篇共同作者论文已发表；1项研究在投</span></a>
       <a class="fact" href="/projects/?type=基金"><strong>基金项目参与</strong><span>参与国家自然科学基金重点项目与面上项目研究</span></a>
       <a class="fact" href="/projects/?domain=油气管网"><strong>工程项目参与</strong><span>覆盖管网仿真、控制、优化、时序预测与软件验证</span></a>
     </div>
@@ -116,7 +116,7 @@ const tools = (await getCollection('tools')).filter((t) => t.data.featured);
     <div class="container">
       <p class="eyebrow">PUBLICATIONS</p>
       <h2>代表成果</h2>
-      <p class="lede">下面列出三篇已发表第一作者论文和一项在投研究。两篇SCI可直接打开DOI页面。</p>
+      <p class="lede">这里列出3篇已发表第一作者论文和1项在投研究；成果页另收录5篇共同作者论文，并说明署名位置与参与内容。</p>
       <div class="publication-list" style="margin-top:32px">
         {publications.map((publication) => <PublicationItem publication={publication} />)}
       </div>

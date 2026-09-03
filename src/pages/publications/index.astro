@@ -2,11 +2,11 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PublicationItem from '../../components/PublicationItem.astro';
-const publications = (await getCollection('publications')).sort((a, b) => b.data.year - a.data.year);
+const publications = (await getCollection('publications')).sort((a, b) => b.data.year - a.data.year || a.data.id.localeCompare(b.data.id));
 ---
 
-<BaseLayout title="论文成果｜李宗泽" description="我的第一作者SCI、中文核心论文和在投研究。">
-  <header class="page-hero"><div class="container"><nav class="breadcrumbs" aria-label="面包屑"><a href="/">首页</a> / 成果</nav><p class="eyebrow">PUBLICATIONS</p><h1>论文成果</h1><p class="lede">目前有两篇第一作者SCI和一篇第一作者中文核心论文已发表，另有一项研究在投。</p></div></header>
+<BaseLayout title="论文成果｜李宗泽" description="我的第一作者与共同作者论文，以及每项研究中的具体署名和参与内容。">
+  <header class="page-hero"><div class="container"><nav class="breadcrumbs" aria-label="面包屑"><a href="/">首页</a> / 成果</nav><p class="eyebrow">PUBLICATIONS · 9</p><h1>论文成果</h1><p class="lede">目前收录8篇已发表论文，其中3篇为第一作者、5篇为共同作者；另有1项第一作者研究在投。每篇论文都标明署名位置、研究内容和我在其中的工作。</p></div></header>
   <section class="section">
     <div class="container">
       <div class="filter-panel" data-publication-filters>
@@ -16,13 +16,14 @@ const publications = (await getCollection('publications')).sort((a, b) => b.data
           <button class="filter-button" type="button" aria-pressed="false" data-pub-filter="已发表">已发表</button>
           <button class="filter-button" type="button" aria-pressed="false" data-pub-filter="在投">在投</button>
           <button class="filter-button" type="button" aria-pressed="false" data-pub-filter="第一作者">第一作者</button>
+          <button class="filter-button" type="button" aria-pressed="false" data-pub-filter="共同作者">共同作者</button>
         </div>
       </div>
       <div class="publication-list">{publications.map((p) => <PublicationItem publication={p} />)}</div>
       <section class="section-compact reading-width">
         <h2>关于链接</h2>
         <ul>
-          <li>两篇SCI可通过DOI打开期刊页面。</li>
+          <li>已发表的7篇SCI均可通过DOI打开期刊页面。</li>
           <li>中文核心论文的官方页面、卷期和页码仍待补充。</li>
           <li>在投研究只列研究方向和当前状态。</li>
         </ul>
@@ -36,7 +37,7 @@ const publications = (await getCollection('publications')).sort((a, b) => b.data
       buttons.forEach((button) => button.addEventListener('click', () => {
         buttons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
         const value = button.dataset.pubFilter;
-        items.forEach((item) => { item.hidden = value !== 'all' && item.dataset.status !== value && item.dataset.position !== value; });
+        items.forEach((item) => { item.hidden = value !== 'all' && item.dataset.status !== value && item.dataset.authorGroup !== value; });
       }));
     })();
   </script>
